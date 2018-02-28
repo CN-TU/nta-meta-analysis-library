@@ -76,13 +76,22 @@ def count_field(directory, field, perpaper=False):
 ##############################################
 
 
-def get_papers_per_features(directory):
-    """Shows for each base feature in the database the papers that use it."""
+def _get_papers_per(directory, f):
     out = {}
     for paper in iterate_directory(directory):
-        for feat in get_base_features(paper):
-            if feat in out:
-                out[feat].add(paper)
+        for val in f(paper):
+            if val in out:
+                out[val].add(paper)
             else:
-                out[feat] = {paper}
+                out[val] = {paper}
     return out
+
+
+def get_papers_per_features(directory):
+    """Shows for each base feature in the database the papers that use it."""
+    return _get_papers_per(directory, get_base_features)
+
+
+def get_papers_per_field(directory, field):
+    """Shows, for each value in a specific field, the papers that use it."""
+    return _get_papers_per(directory, lambda paper: get_field(paper, field))
