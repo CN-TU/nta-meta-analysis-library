@@ -8,8 +8,8 @@ git worktree prune
 for VERSION in $( git tag ); do
     path=$DIR/ntarcpy/_version/${VERSION/\./_}
     git worktree add --force $path $VERSION
-    echo "PROJECT_PATH='$path'" > $path/conf.py
-    echo "API_KEY=''" >> $path/conf.py
-    echo "MAPS_API_KEY=''" >> $path/conf.py
-    echo "CACHE_DIR=None" >> $path/conf.py
+    echo "PROJECT_PATH='$path'" > $path/v2_processing/conf.py
+    echo "API_KEY=''" >> $path/v2_processing/conf.py
+    echo "MAPS_API_KEY=''" >> $path/v2_processing/conf.py
+    echo "CACHE_DIR=None" >> $path/v2_processing/conf.py
 done
