@@ -28,3 +28,21 @@ def get_base_features(paper):
         if flow_aggregation.features is not None:
             for feat in flow_aggregation.features.get_base_feature_names():
                 yield feat
+
+
+def get_field(obj, field):
+    if isinstance(obj, str):
+        yield obj
+    elif field is not None:
+        s = field.split('.')
+        f = s[0]
+        next_f = '.'.join(s[1:]) if len(s) > 0 else None
+
+        att = getattr(obj, f)
+        if isinstance(att, list):
+            for a in att:
+                for val in get_field(a, next_f):
+                    yield val
+        else:
+            for val in get_field(att, next_f):
+                yield val

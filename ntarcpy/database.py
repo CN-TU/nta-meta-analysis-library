@@ -56,6 +56,19 @@ def count_base_features(directory, perpaper=False):
     return out
 
 
+def count_field(directory, field, perpaper=False):
+    """Counts the existing different values in a specific field.
+    If ``perpaper is ``True``, repeated values in the same paper are only counted once."""
+    out = {}
+    for paper in iterate_directory(directory):
+        it = get_field(paper, field)
+        if perpaper:
+            update_counts_unique(it, out)
+        else:
+            update_counts(it, out)
+    return out
+
+
 ##############################################
 #
 # Get papers with things...
