@@ -31,7 +31,7 @@ def get_base_features(paper):
 
 
 def get_field(obj, field):
-    if isinstance(obj, str):
+    if isinstance(obj, (str, bool, int, float)):
         yield obj
     elif field is not None:
         s = field.split('.')
