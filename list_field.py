@@ -28,4 +28,7 @@ if __name__ == '__main__':
         f = db.count_field
 
     for k, v in sorted(f(args.database, args.field).items(), key=key, reverse=True):
-        print(k, v, sep=args.sep)
+        if args.papers:
+            print(k, '|'.join(str(vv) for vv in v), sep=args.sep)
+        else:
+            print(k, v, sep=args.sep)
