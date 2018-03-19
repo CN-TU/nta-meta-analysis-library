@@ -13,6 +13,7 @@ RUN git clone https://github.com/CN-TU/nta-meta-analysis /nta-meta-analysis
 RUN echo "#!/bin/sh" > entrypoint.sh && \
     echo "(cd /ntarc-spec && git pull > /dev/null 2>&1)" >> entrypoint.sh && \
     echo "(cd /ntarc-library && git pull > /dev/null 2>&1)" >> entrypoint.sh && \
+    echo "(cd /nta-meta-analysis && git pull > /dev/null 2>&1)" >> entrypoint.sh && \
     echo "cd /ntarc-library && export PYTHONPATH=\`pwd\` && python \$@" >> entrypoint.sh && \ 
     chmod +x entrypoint.sh
 
