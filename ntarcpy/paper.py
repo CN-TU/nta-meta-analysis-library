@@ -38,7 +38,10 @@ def get_field(obj, field):
         f = s[0]
         next_f = '.'.join(s[1:]) if len(s) > 0 else None
 
-        att = getattr(obj, f)
+        if isinstance(obj, dict):
+            att = obj[f]
+        else:
+            att = getattr(obj, f)
         if att is not None:
             if isinstance(att, list):
                 for a in att:
