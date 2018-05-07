@@ -39,10 +39,11 @@ def get_field(obj, field):
         next_f = '.'.join(s[1:]) if len(s) > 0 else None
 
         att = getattr(obj, f)
-        if isinstance(att, list):
-            for a in att:
-                for val in get_field(a, next_f):
+        if att is not None:
+            if isinstance(att, list):
+                for a in att:
+                    for val in get_field(a, next_f):
+                        yield val
+            else:
+                for val in get_field(att, next_f):
                     yield val
-        else:
-            for val in get_field(att, next_f):
-                yield val
