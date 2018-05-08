@@ -30,7 +30,7 @@ if __name__ == '__main__':
     for k, v in sorted(f(args.database, args.field).items(), key=key, reverse=True):
         if args.papers:
             print(k, '|'.join(str(vv) for vv in v), sep=args.sep)
-        if args.per_paper:
+        elif args.per_paper:
             print(k, len(v), sep=args.sep)
         else:
             print(k, v, sep=args.sep)
