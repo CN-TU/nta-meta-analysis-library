@@ -20,7 +20,7 @@ parser.add_argument('-F', '--sep', type=str, default=';',
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    if args.papers:
+    if args.papers or args.per_paper:
         key = lambda x: len(x[1])
         f = db.get_papers_per_field
     else:
@@ -30,5 +30,7 @@ if __name__ == '__main__':
     for k, v in sorted(f(args.database, args.field).items(), key=key, reverse=True):
         if args.papers:
             print(k, '|'.join(str(vv) for vv in v), sep=args.sep)
+        if args.per_paper:
+            print(k, len(v), sep=args.sep)
         else:
             print(k, v, sep=args.sep)
