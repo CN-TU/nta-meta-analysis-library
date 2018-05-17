@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     confs = {}
 
-    for i, paper in enumerate(db.iterate_directory(args.database)):
+    for paper in db.iterate_directory(args.database):
         if paper.metadata.conference is not None:
             name = paper.metadata.conference.name
         elif paper.metadata.journal is not None:
@@ -27,9 +27,6 @@ if __name__ == '__main__':
             confs[name] += 1
         else:
             confs[name] = 1
-
-        if i > 500:
-            break
 
     for c, count in sorted(confs.items(), key=lambda x: x[1], reverse=True):
         print(c, count)
