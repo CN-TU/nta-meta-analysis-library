@@ -1,4 +1,5 @@
 ntarcpy/_version/
+ntarcpy/conf.py
 .idea
 
 # Byte-compiled / optimized / DLL files
