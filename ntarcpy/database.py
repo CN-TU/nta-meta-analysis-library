@@ -1,6 +1,3 @@
-import os
-from collections import OrderedDict
-import json
 from .paper import *
 
 
@@ -12,7 +9,7 @@ def iterate_directory(directory):
     for year in sorted(os.listdir(directory)):
         for filename in sorted(os.listdir(directory + os.sep + year)):
             if filename[-5:] == '.json':
-                yield Paper(_open_json(directory + os.sep + year + os.sep + filename))
+                yield Paper(directory + os.sep + year + os.sep + filename)
 
 
 def update_counts(iterator, d):

@@ -1,17 +1,60 @@
+import os
 import importlib
+import json
+from .entities import Entity
 
 
 def _paper_class(version):
-    if version == 'v2':  # exception for v2 name
-        version = 'v2.0'
+    version = '.'.join(version.split('.')[:2])  # use only MAJOR.MINOR, ignore rest
     mod = importlib.import_module('ntarcpy._version.' + version.replace('.', '_') + '.v2_processing.structures')
-    paper_class =  getattr(mod, 'FullPaper')
+    paper_class = getattr(mod, 'FullPaper')
     return paper_class
 
 
-def Paper(paper):
-    version = paper['version']
-    return _paper_class(version)(paper)
+class Paper(object):
+    def __init__(self, paper_fname):
+        self.fname = paper_fname
+        with open(self.fname) as fd:
+            paper_dict = json.load(fd)
+
+        version = paper_dict['version']
+        self.version = '.'.join(version.split('.')[:2])
+        self.paper = _paper_class(version)(paper_dict)
+        self._metadata = None
+
+    def __repr__(self):
+        return os.sep.join(self.fname.split(os.sep)[-2:])
+
+    @property
+    def reference(self):
+        return self.paper.reference_block
+
+    @property
+    def data(self):
+        return self.paper.data_block
+
+    @property
+    def preprocessing(self):
+        return self.paper.preprocessing_block
+
+    @property
+    def analysis_method(self):
+        return self.paper.analysis_method_block
+
+    @property
+    def evaluation(self):
+        return self.paper.evaluation_block
+
+    @property
+    def result(self):
+        return self.paper.result_block
+
+    @property
+    def metadata(self):
+        if self._metadata is None:
+            ref = self.reference
+            self._metadata = Entity(ref.title, ref.authors, ref.year)
+        return self._metadata
 
 
 def get_base_features(paper):
