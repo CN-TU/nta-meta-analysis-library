@@ -5,11 +5,8 @@ rm -r $DIR/ntarcpy/_version/*
 git clone https://github.com/CN-TU/nta-meta-analysis-specification /tmp/ntarc-spec || exit 1
 cd /tmp/ntarc-spec
 git worktree prune
-for VERSION in $( git tag ); do
-    path=$DIR/ntarcpy/_version/${VERSION/\./_}
+for VERSION in $( git branch --list "r*" | tr -d " *" ); do  # lists branches with name "r*", and then remove the '*', if it exists
+    VERSION_PATH=${VERSION/r/v}
+    path=$DIR/ntarcpy/_version/${VERSION_PATH/\./_}
     git worktree add --force $path $VERSION
-    echo "PROJECT_PATH='$path'" > $path/v2_processing/conf.py
-    echo "API_KEY=''" >> $path/v2_processing/conf.py
-    echo "MAPS_API_KEY=''" >> $path/v2_processing/conf.py
-    echo "CACHE_DIR=None" >> $path/v2_processing/conf.py
 done
