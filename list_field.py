@@ -16,6 +16,9 @@ parser.add_argument('--papers', action='store_true',
                     help="With this option, get the papers that use each value.")
 parser.add_argument('-F', '--sep', type=str, default=';',
                     help="Separator to use in the output.")
+parser.add_argument('--ignore-errors', action='store_true',
+                    help="When this option is set, the script will run even if it the given attribute doesn't exist. "
+                         "Useful for debugging.")
 
 
 if __name__ == '__main__':
