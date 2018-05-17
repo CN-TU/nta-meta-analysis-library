@@ -1,0 +1,4 @@
+# API key for Microsoft Academic Knowledge API https://labs.cognitive.microsoft.com/en-us/project-academic-knowledge
+API_KEY = ''
+CACHE_DIR = '~/.cache/ntarc'
+LOG_LEVEL = 'WARN'
