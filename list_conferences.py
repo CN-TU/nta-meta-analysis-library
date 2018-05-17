@@ -3,7 +3,7 @@ from ntarcpy import database as db
 
 
 description = """
-Gets conferences of papers.
+Gets list of conferences/journals in the database, and how often they appear.
 """
 
 
