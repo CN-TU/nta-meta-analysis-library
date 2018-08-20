@@ -11,3 +11,8 @@ for VERSION in $( git branch -a --list | egrep -o "r[0-9].*$" ); do  # lists bra
     path=$DIR/ntarcpy/_version/${VERSION_PATH/\./_}
     git worktree add --force $path remotes/origin/$VERSION
 done
+
+cd $DIR
+if [ ! -f ntarcpy/conf.py ]; then
+    cp ntarcpy/conf.py.sample ntarcpy/conf.py
+fi
