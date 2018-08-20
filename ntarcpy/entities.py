@@ -35,7 +35,24 @@ class BaseEntity(object):
     def _set_id(self):
         """To be implemented by each entity.
         Returns the id of the requested entity."""
-        raise NotImplemented
+        raise NotImplementedError
+
+    @property
+    def name(self):
+        raise NotImplementedError
+
+    def __repr__(self):
+        try:
+            return self.name
+        except NotImplementedError:
+            return type(self).__name__ + '_' + str(self.id)
+
+
+    def __eq__(self, other):
+        return type(self).__name__ == type(other).__name__ and self.id == other.id
+
+    def __hash__(self):
+        return hash(str(self))
 
     @property
     def _cache_id_filename(self):
@@ -174,10 +191,18 @@ class AuthorEntity(BaseEntityId):
     _cache_dirname = 'author_id'
     _attrs = 'Id,AuN,DAuN,CC,ECC,E,SSD'
 
+    @property
+    def name(self):
+        return self.data['microsoft_api']['DAuN']
+
 
 class AffiliationEntity(BaseEntityId):
     _cache_dirname = 'affiliation_id'
     _attrs = 'Id,AfN,DAfN,CC,ECC,SSD'
+
+    @property
+    def name(self):
+        return self.data['microsoft_api']['DAfN']
 
 
 class JournalEntity(BaseEntityId):
