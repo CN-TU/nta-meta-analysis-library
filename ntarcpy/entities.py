@@ -8,8 +8,9 @@ import json
 from .conf import API_KEY, CACHE_DIR, LOG_LEVEL
 
 
+USE_API = True
 if API_KEY is None or len(API_KEY) < 1:
-    raise ImportError('No API key was defined!')
+    USE_API = False
 if LOG_LEVEL is None or isinstance(LOG_LEVEL, str) and len(LOG_LEVEL) < 1:
     LOG_LEVEL = logging.WARN
 CACHE_DIR = os.path.expanduser(CACHE_DIR)
@@ -88,6 +89,8 @@ class BaseEntity(object):
     def _query_id_attrs(self, qid, attrs):
         """Queries the server for the given ``id``, with ``attrs`` the attributes in the request."""
         if not self._check_cache():
+            if not USE_API:
+                raise IOError('No API key was given in config.py.')
             self.logger.debug('Querying for id: %d' % qid)
             expr = 'Id=' + str(qid)
 
