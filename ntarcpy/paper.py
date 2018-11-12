@@ -19,6 +19,7 @@ class Paper(object):
 
         version = paper_dict['version']
         self.version = '.'.join(version.split('.')[:2])
+        self.full_version = version
         self.paper = _paper_class(version)(paper_dict)
         self._metadata = None
 
