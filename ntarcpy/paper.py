@@ -81,7 +81,7 @@ class Paper(object):
         }
         if self.reference.organization_publishers is not None:
             bibtex_dict['publisher'] = ' and '.join(
-                [publisher_to_name[pub] for pub in self.reference.organization_publishers])
+                [get_publisher_name(pub) for pub in self.reference.organization_publishers])
         for field, value in self.reference.bibtex.items():
             if field == 'type':  # skip bibtex type
                 continue
@@ -93,15 +93,20 @@ class Paper(object):
         return bibtexparser.dumps(bibdb)
 
 
-publisher_to_name = {
-    'ieee': 'IEEE',
-    'elsevier': 'Elsevier',
-    'acm': 'ACM',
-    'springer': 'Springer',
-    'wiley': 'Wiley',
-    'taylor_&_francis': 'Taylor & Francis',
-    'mdpi': 'MDPI',
-}
+def get_publisher_name(publisher_string):
+    publisher_to_name = {
+        'ieee': 'IEEE',
+        'elsevier': 'Elsevier',
+        'acm': 'ACM',
+        'springer': 'Springer',
+        'wiley': 'Wiley',
+        'taylor_&_francis': 'Taylor & Francis',
+        'mdpi': 'MDPI',
+    }
+    try:
+        return publisher_to_name[publisher_string]
+    except KeyError:
+        return publisher_string
 
 
 def get_base_features(paper):
