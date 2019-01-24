@@ -16,6 +16,8 @@ parser.add_argument('-F', '--sep', type=str, default=';',
                     help="Separator to use in the output.")
 parser.add_argument('--papers', action='store_true',
                     help="With this option, get the papers that use each value.")
+parser.add_argument('--bibtex', action='store_true',
+                    help="Get the papers in BibTeX format.")
 
 
 if __name__ == '__main__':
@@ -26,7 +28,10 @@ if __name__ == '__main__':
     for paper in db.iterate_directory(args.database):
         if eval(condition):
             papers.append(paper)
-    if args.papers:
+    if args.bibtex:
+        for p in papers:
+            print(p.get_bibtex())
+    elif args.papers:
         print(args.sep.join([str(p) for p in papers]))
     else:
         print(len(papers))

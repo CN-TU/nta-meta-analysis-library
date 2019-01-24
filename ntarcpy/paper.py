@@ -1,6 +1,10 @@
 import os
 import importlib
 import json
+try:
+    import bibtexparser
+except ImportError:
+    bibtexparser = None
 from .entities import Entity
 
 
@@ -56,6 +60,48 @@ class Paper(object):
             ref = self.reference
             self._metadata = Entity(ref.title, ref.authors, ref.year)
         return self._metadata
+
+    def get_bibtex(self):
+        assert bibtexparser is not None, 'Please install BibtexParser'
+        paper_id = str(self.reference.year) + self.fname.split('/')[-1].split('.')[0]
+        paper_type = self.reference.bibtex['type']
+        publication_key = {
+            'peer_reviewed_journal': 'journal',
+            'peer_reviewed_conference': 'booktitle',
+            'arxiv': 'journal',
+            'technical_report': 'institution',
+        }[self.reference.publication_type]
+        bibtex_dict = {
+            'ID': paper_id,
+            'ENTRYTYPE': paper_type,
+            'year': str(self.reference.year),
+            'title': self.reference.title,
+            'author': ' and '.join(self.reference.authors),
+            publication_key: self.reference.publication_name,
+        }
+        if self.reference.organization_publishers is not None:
+            bibtex_dict['publisher'] = ' and '.join(
+                [publisher_to_name[pub] for pub in self.reference.organization_publishers])
+        for field, value in self.reference.bibtex.items():
+            if field == 'type':  # skip bibtex type
+                continue
+            bibtex_dict[field] = value
+
+
+        bibdb = bibtexparser.bibdatabase.BibDatabase()
+        bibdb.entries = [bibtex_dict]
+        return bibtexparser.dumps(bibdb)
+
+
+publisher_to_name = {
+    'ieee': 'IEEE',
+    'elsevier': 'Elsevier',
+    'acm': 'ACM',
+    'springer': 'Springer',
+    'wiley': 'Wiley',
+    'taylor_&_francis': 'Taylor & Francis',
+    'mdpi': 'MDPI',
+}
 
 
 def get_base_features(paper):

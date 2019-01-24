@@ -4,7 +4,7 @@ import time
 import logging
 import requests
 import unicodedata
-import json
+import simplejson as json
 from .conf import API_KEY, CACHE_DIR, LOG_LEVEL
 
 
@@ -47,7 +47,11 @@ class BaseEntity(object):
             return self.name
         except NotImplementedError:
             return type(self).__name__ + '_' + str(self.id)
-
+        except IOError as e:
+            if not USE_API:
+                return type(self).__name__ + '_' + str(self.id)
+            else:
+                raise e
 
     def __eq__(self, other):
         return type(self).__name__ == type(other).__name__ and self.id == other.id
